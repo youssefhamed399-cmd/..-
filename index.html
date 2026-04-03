@@ -1,347 +1,36 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>مدينة الليل والنهار - تصميم CSS خالص</title>
+    <title>My Heart Page</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            user-select: none;
-        }
-
-        body {
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #111;
-            font-family: 'Segoe UI', 'Arial', sans-serif;
-            overflow: hidden;
-        }
-
-        /* الحاوية الرئيسية للمدينة */
-        .city-scene {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            cursor: pointer;
-        }
-
-        /* السماء والخلفية المتغيرة */
-        .sky {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            transition: background 1.2s ease-in-out;
-            z-index: 0;
-        }
-
-        /* النهار */
-        .day-sky {
-            background: linear-gradient(145deg, #4facfe 0%, #00f2fe 100%);
-        }
-
-        /* الليل */
-        .night-sky {
-            background: linear-gradient(145deg, #0f2027, #203a43, #2c5364);
-            opacity: 0;
-            transition: opacity 1.2s ease;
-        }
-
-        /* الشمس والقمر */
-        .sun-moon {
-            position: absolute;
-            top: 12%;
-            right: 10%;
-            width: 80px;
-            height: 80px;
-            background: #ffdd77;
-            border-radius: 50%;
-            box-shadow: 0 0 40px #ffcc66;
-            transition: all 0.8s ease;
-            z-index: 2;
-        }
-
-        /* النجوم (تظهر فقط ليلاً) */
-        .stars {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 60%;
-            opacity: 0;
-            transition: opacity 0.8s ease;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            width: 2px;
-            height: 2px;
-            opacity: 0.7;
-            animation: twinkle 2s infinite alternate;
-        }
-
-        @keyframes twinkle {
-            0% { opacity: 0.3; transform: scale(1);}
-            100% { opacity: 1; transform: scale(1.2);}
-        }
-
-        /* الأرض والمدينة */
-        .ground {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 45%;
-            background: #2c2c2c;
-            z-index: 3;
-            transition: background 0.8s ease;
-        }
-
-        /* المباني */
-        .buildings {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 45%;
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-around;
-            gap: 4px;
-            padding: 0 15px;
-            z-index: 4;
-        }
-
-        .building {
-            background: #4a4e69;
-            width: 70px;
-            transition: all 0.3s;
-            border-radius: 6px 6px 0 0;
-            position: relative;
-            box-shadow: 0 -3px 0 rgba(0,0,0,0.2);
-        }
-
-        /* ألوان المباني حسب الارتفاع */
-        .building:nth-child(odd) { background: #5a5e7c; }
-        .building:nth-child(3n) { background: #6c6f8d; }
-        .building:nth-child(5n+2) { background: #3d405b; }
-
-        /* النوافذ */
-        .windows {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 8px;
-            padding: 12px 8px;
-        }
-
-        .window {
-            width: 10px;
-            height: 12px;
-            background: #ffdd88;
-            border-radius: 2px;
-            transition: background 0.3s, box-shadow 0.3s;
-            box-shadow: 0 0 4px #ffaa44;
-        }
-
-        /* نوافذ الليل (مضاءة) */
-        .night .window {
-            background: #ffcc55;
-            box-shadow: 0 0 10px #ffaa33;
-        }
-
-        /* أرضية الليل */
-        .night .ground {
-            background: #1a1a2e;
-        }
-
-        /* تبديل الليل والنهار */
-        .toggle-btn {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            width: 70px;
-            height: 34px;
-            background: #e0c87c;
-            border-radius: 40px;
-            border: 2px solid white;
-            cursor: pointer;
-            z-index: 20;
-            transition: 0.3s;
-            appearance: none;
-        }
-
-        .toggle-btn:checked {
-            background: #2c3e66;
-        }
-
-        .toggle-btn::before {
-            content: "☀️";
-            position: absolute;
-            top: 3px;
-            left: 6px;
-            font-size: 22px;
-            transition: 0.3s;
-        }
-
-        .toggle-btn:checked::before {
-            content: "🌙";
-            left: 40px;
-        }
-
-        label {
-            position: fixed;
-            bottom: 18px;
-            right: 105px;
-            color: white;
-            background: rgba(0,0,0,0.5);
-            padding: 5px 12px;
-            border-radius: 25px;
-            font-size: 14px;
-            backdrop-filter: blur(4px);
-            z-index: 20;
-            font-family: monospace;
-        }
-
-        /* تعديلات الليل على الشمس/القمر */
-        .night .sun-moon {
-            background: #e0e0c0;
-            box-shadow: 0 0 20px #fff0aa;
-            transform: translateY(10px) scale(0.9);
-        }
-
-        .night .stars {
-            opacity: 1;
-        }
-
-        .night .day-sky {
-            opacity: 0;
-        }
-
-        .night .night-sky {
-            opacity: 1;
-        }
-
-        /* تأثيرات إضافية */
-        .cloud {
-            position: absolute;
-            background: rgba(255,255,245,0.7);
-            border-radius: 80% 20% 70% 30% / 60% 50% 50% 40%;
-            filter: blur(12px);
-            z-index: 2;
-            transition: opacity 0.6s;
-        }
-
-        .night .cloud {
-            opacity: 0.1;
-        }
-
-        /* تكيف مع الشاشات الصغيرة */
-        @media (max-width: 700px) {
-            .building { width: 45px; }
-            .window { width: 6px; height: 8px; gap: 4px; }
-            .sun-moon { width: 55px; height: 55px; top: 8%; right: 5%; }
-        }
+        body { background-color: black; color: #ff4d6d; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; font-family: Arial, sans-serif; }
+        canvas { border: none; }
+        h1 { margin-top: 20px; }
     </style>
 </head>
 <body>
-    <div class="city-scene" id="cityScene">
-        <div class="sky day-sky"></div>
-        <div class="sky night-sky"></div>
-        <div class="stars" id="starsContainer"></div>
-        <div class="sun-moon" id="sunMoon"></div>
-        
-        <!-- بعض السحب (تظهر في النهار) -->
-        <div class="cloud" style="top: 15%; left: -30px; width: 180px; height: 70px;"></div>
-        <div class="cloud" style="top: 25%; right: 5%; width: 220px; height: 85px;"></div>
-        <div class="cloud" style="top: 45%; left: 20%; width: 150px; height: 55px;"></div>
-
-        <div class="ground"></div>
-        <div class="buildings" id="buildingsContainer"></div>
-    </div>
-
-    <input type="checkbox" id="dayNightToggle" class="toggle-btn">
-    <label for="dayNightToggle">🌓 ليل/نهار</label>
+    <canvas id="heartCanvas" width="400" height="400"></canvas>
+    <h1>I miss you ❤️</h1>
 
     <script>
-        // إنشاء المباني بشكل ديناميكي (15 مبنى بارتفاعات مختلفة)
-        const buildingsContainer = document.getElementById('buildingsContainer');
-        const buildingHeights = [110, 160, 90, 200, 130, 175, 95, 220, 145, 115, 185, 100, 210, 125, 150, 80, 190, 140, 170, 105];
-        
-        buildingHeights.forEach((height, idx) => {
-            const building = document.createElement('div');
-            building.classList.add('building');
-            building.style.height = `${height}px`;
-            building.style.width = `${Math.floor(45 + Math.sin(idx) * 8)}px`; // عرض متغير
-            // إضافة النوافذ
-            const windowsDiv = document.createElement('div');
-            windowsDiv.classList.add('windows');
-            const windowRows = Math.floor(height / 28);
-            const windowCols = Math.floor(building.style.width.replace('px','') / 16);
-            for (let i = 0; i < windowRows * 3; i++) {
-                const win = document.createElement('div');
-                win.classList.add('window');
-                windowsDiv.appendChild(win);
-            }
-            building.appendChild(windowsDiv);
-            buildingsContainer.appendChild(building);
-        });
+        const canvas = document.getElementById('heartCanvas');
+        const ctx = canvas.getContext('2d');
+        ctx.translate(200, 200); // تحريك نقطة الرسم للمركز
 
-        // إنشاء النجوم
-        const starsContainer = document.getElementById('starsContainer');
-        for (let i = 0; i < 180; i++) {
-            const star = document.createElement('div');
-            star.classList.add('star');
-            star.style.top = `${Math.random() * 60}%`;
-            star.style.left = `${Math.random() * 100}%`;
-            star.style.animationDelay = `${Math.random() * 3}s`;
-            star.style.width = `${Math.random() * 3 + 1}px`;
-            star.style.height = star.style.width;
-            starsContainer.appendChild(star);
+        function drawHeart(scale, color) {
+            ctx.beginPath();
+            ctx.fillStyle = color;
+            for (let i = 0; i < Math.PI * 2; i += 0.01) {
+                // نفس معادلة البايثون لكن للجافاسكريبت
+                let x = 16 * Math.pow(Math.sin(i), 3);
+                let y = -(13 * Math.cos(i) - 5 * Math.cos(2*i) - 2 * Math.cos(3*i) - Math.cos(4*i));
+                ctx.lineTo(x * scale, y * scale);
+            }
+            ctx.fill();
         }
 
-        // التحكم في الليل والنهار
-        const toggle = document.getElementById('dayNightToggle');
-        const scene = document.getElementById('cityScene');
-        
-        function updateTheme() {
-            if (toggle.checked) {
-                scene.classList.add('night');
-            } else {
-                scene.classList.remove('night');
-            }
-        }
-        
-        toggle.addEventListener('change', updateTheme);
-        updateTheme(); // تطبيق الحالة الابتدائية
-
-        // تأثير بسيط: تحريك الشمس/القمر مع التبديل
-        const sunMoon = document.getElementById('sunMoon');
-        toggle.addEventListener('change', () => {
-            if (toggle.checked) {
-                sunMoon.style.transform = 'translateY(15px) scale(0.9)';
-            } else {
-                sunMoon.style.transform = 'translateY(0px) scale(1)';
-            }
-        });
-
-        // إضافة نافذة متحركة للماوس (تأثير بسيط)
-        document.addEventListener('mousemove', (e) => {
-            const x = (e.clientX / window.innerWidth) * 20;
-            const y = (e.clientY / window.innerHeight) * 10;
-            document.querySelector('.buildings').style.transform = `translateX(${x * 0.05}px) translateY(${y * 0.03}px)`;
-        });
+        drawHeart(10, "#330000"); // القلب الخلفي
+        drawHeart(9, "#ff1a1a");  // القلب الأساسي
     </script>
 </body>
 </html>
