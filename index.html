@@ -1,36 +1,380 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar" dir="rtl">
 <head>
-    <title>My Heart Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>قلبى النابض بحبك</title>
     <style>
-        body { background-color: black; color: #ff4d6d; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; font-family: Arial, sans-serif; }
-        canvas { border: none; }
-        h1 { margin-top: 20px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #0a0a0a 0%, #1a0105 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', 'Tahoma', 'Cairo', 'Amiri', 'Traditional Arabic', 'Tajawal', sans-serif;
+            padding: 20px;
+            margin: 0;
+            position: relative;
+        }
+
+        /* إضافة جزيئات صغيرة متلألئة */
+        body::before {
+            content: '';
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(2px 2px at 20px 40px, #ffb7c5, rgba(0,0,0,0)),
+                              radial-gradient(1px 1px at 80px 200px, #ff8da1, rgba(0,0,0,0));
+            background-repeat: no-repeat;
+            background-size: 200px 200px, 300px 300px;
+            opacity: 0.3;
+            pointer-events: none;
+            animation: twinkle 4s infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.2; }
+            100% { opacity: 0.6; }
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            max-width: 750px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(3px);
+            border-radius: 70px 70px 60px 60px;
+            padding: 25px 25px 40px 25px;
+            box-shadow: 0 30px 40px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 77, 109, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        canvas {
+            display: block;
+            margin: 0 auto;
+            filter: drop-shadow(0 0 12px #ff4d6d);
+            transition: transform 0.2s;
+        }
+        
+        canvas:hover {
+            transform: scale(1.02);
+        }
+
+        /* تحسين النص الرومانسي */
+        .love-message {
+            margin-top: 20px;
+            padding: 20px 25px;
+            background: rgba(20, 5, 10, 0.75);
+            backdrop-filter: blur(8px);
+            border-radius: 48px;
+            border-right: 4px solid #ff758f;
+            border-left: 1px solid rgba(255, 117, 143, 0.3);
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+            max-width: 550px;
+            width: 100%;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .message-content {
+            font-size: 1.2rem;
+            line-height: 1.85;
+            color: #ffe3e8;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            word-spacing: 2px;
+        }
+
+        /* تنسيق الفقرات الداخلية */
+        .message-content p {
+            margin-bottom: 1.2rem;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+        }
+
+        .message-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .heart-emoji {
+            display: inline-block;
+            animation: heartbeat 1.2s infinite ease;
+            font-size: 1.5rem;
+            margin: 0 4px;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); text-shadow: 0 0 5px #ff3366; }
+        }
+
+        .signature {
+            margin-top: 15px;
+            font-size: 1rem;
+            color: #ffb3c6;
+            text-align: center;
+            font-style: italic;
+            border-top: 1px dashed rgba(255, 105, 130, 0.5);
+            padding-top: 12px;
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* تكيف مع الشاشات الصغيرة */
+        @media (max-width: 550px) {
+            .container {
+                padding: 15px;
+            }
+            .love-message {
+                padding: 16px 18px;
+            }
+            .message-content {
+                font-size: 1rem;
+                line-height: 1.65;
+            }
+            canvas {
+                width: 280px;
+                height: 280px;
+            }
+            .signature {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* نجوم متحركة خلفية */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        footer {
+            margin-top: 15px;
+            font-size: 0.7rem;
+            color: #ff99aa;
+            opacity: 0.6;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-    <canvas id="heartCanvas" width="400" height="400"></canvas>
-    <h1>بحبك يابت و ماتزعليش مني انا عمري ماكنت ابقي بارد معاكي او في ضرر مني ليكي انا كل الي بيبقي نفسي فيه انك تكوني بخير دايما وده اهم حاجه ليا دايما انا مش عاوزك تكوني شيفاني وحش معاكي مع اني علي الاقل بحاول اقدم ليكي كل خير ومش عاوز مردود منه غير ضحكتك الي بتخليني تمام وانا ولا مره فكرت اني اكون اناني معاكي زاي ماقولتي بس في النهاية كل الي بدور عليه انك تكوني تمام وكويسه وحقك عليا في النهاية انا لا كنت اقصد ادايقك ولا اني اعمل الي يتعبك❤️</h1>
+<div class="stars"></div>
+<div class="container">
+    <canvas id="heartCanvas" width="400" height="400" style="width: auto; height: auto; max-width: 100%;"></canvas>
 
-    <script>
+    <div class="love-message">
+        <div class="message-content">
+            <p>🌹 <strong>بحبك يا حبيبتي</strong> 🤍</p>
+            <p>ماتزعليش مني أبدًا .. أنا عمري ما كنت ولا هكون بارد معاكي، ولا في أي ضرر مني ليكي. كل اللي بيبقى جوايا هو إنك تكوني بخير دايمًا، ودي أهم حاجة ليا في الدنيا كلها.</p>
+            <p>أنا مش عايزك أبدًا تفتكري إني وحش معاكي، بالعكس .. أنا على الأقل بحاول أقدم لك كل خير، وما بدورش على مردود غير ضحكتك الجميلة اللي بتخليني تمام 💖</p>
+            <p>صدقيني، ولا مرة فكرت أكون أناني معاكي زي ما قلتي. في النهاية، كل اللي بدور عليه إنك تكوني تمام وكويسة.</p>
+            <p>حقك عليا العين .. أنا لا قصدت أضايقك، ولا يوم فكرت أعمل حاجة تعبك. أنا بس بحبك وبتمنى ابتسامتك دايمًا قدامي <span class="heart-emoji">❤️</span></p>
+        </div>
+        <div class="signature">
+            ✨ دايمًا جنبك .. مهما حصل ✨
+        </div>
+    </div>
+    <footer>💕 قلبك ينبض بحبك ليّا وقلبي دايمًا ليكِ 💕</footer>
+</div>
+
+<script>
+    (function() {
         const canvas = document.getElementById('heartCanvas');
         const ctx = canvas.getContext('2d');
-        ctx.translate(200, 200); // تحريك نقطة الرسم للمركز
-
+        
+        // ضبط الأبعاد الحقيقية للرسم بشكل نقي
+        canvas.width = 400;
+        canvas.height = 400;
+        
+        // إعادة ضبط التحويلات لوضع البداية
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clearRect(0, 0, 400, 400);
+        
+        // تحريك نقطة الأصل إلى منتصف اللوحة
+        ctx.translate(200, 200);
+        
+        // دالة رسم قلب بمعادلة رياضية دقيقة
         function drawHeart(scale, color) {
             ctx.beginPath();
             ctx.fillStyle = color;
-            for (let i = 0; i < Math.PI * 2; i += 0.01) {
-                // نفس معادلة البايثون لكن للجافاسكريبت
-                let x = 16 * Math.pow(Math.sin(i), 3);
-                let y = -(13 * Math.cos(i) - 5 * Math.cos(2*i) - 2 * Math.cos(3*i) - Math.cos(4*i));
-                ctx.lineTo(x * scale, y * scale);
+            // المعادلة الكلاسيكية للقلب: x = 16 * sin(t)^3 , y = 13cos(t) - 5 cos(2t) - 2cos(3t) - cos(4t)
+            for (let t = 0; t <= Math.PI * 2; t += 0.02) {
+                let x = 16 * Math.pow(Math.sin(t), 3);
+                let y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+                // تكبير الحجم حسب الـ scale
+                let px = x * scale;
+                let py = y * scale;
+                if (t === 0) {
+                    ctx.moveTo(px, py);
+                } else {
+                    ctx.lineTo(px, py);
+                }
             }
+            ctx.closePath();
             ctx.fill();
         }
-
-        drawHeart(10, "#330000"); // القلب الخلفي
-        drawHeart(9, "#ff1a1a");  // القلب الأساسي
-    </script>
+        
+        // رسم طبقات لإعطاء تأثير ثلاثي الأبعاد ولمعان
+        drawHeart(10.2, "#2c0a12");   // ظل خارجي عميق
+        drawHeart(9.8, "#7a1f2e");    // طبقة وسطى داكنة
+        drawHeart(9.2, "#e61a3a");    // أحمر وردي قوي
+        drawHeart(8.7, "#ff3366");    // لون أساسي حيوي
+        drawHeart(8, "#ff4d6d");      // قلب ناري داخلي
+        drawHeart(6.5, "#ff8aa8");    // تسليط الضوء في المنتصف
+        drawHeart(4.2, "#ffb3c6");    // بريق قلب من الداخل
+        
+        // إضافة بريق إضافي (هايلايتس)
+        ctx.beginPath();
+        ctx.fillStyle = "#fff9fb";
+        for (let i = 0; i < 2; i++) {
+            let offsetX = (i === 0 ? -22 : 24);
+            let offsetY = (i === 0 ? -18 : -15);
+            ctx.moveTo(offsetX, offsetY);
+            ctx.arc(offsetX, offsetY, 3 + i*1.2, 0, Math.PI*2);
+            ctx.fill();
+        }
+        
+        // تأثير توهج خفيف حول القلب (glow effect)
+        ctx.shadowBlur = 0; // reset
+        // إضافة نقط ضوء صغيرة عشوائية محيطة
+        ctx.fillStyle = "#ffd9e2";
+        for (let s = 0; s < 35; s++) {
+            let angle = Math.random() * Math.PI * 2;
+            let rad = 12 + Math.random() * 18;
+            let xSpark = Math.cos(angle) * rad * 7;
+            let ySpark = Math.sin(angle) * rad * 6.5;
+            ctx.beginPath();
+            ctx.arc(xSpark, ySpark, Math.random() * 1.3 + 0.6, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 180, 200, ${0.2 + Math.random() * 0.5})`;
+            ctx.fill();
+        }
+        
+        // إضافة نبض خفيف بواسطة تغيير الظل بشكل متحرك (animation)
+        let glowIntensity = 0;
+        let increasing = true;
+        
+        function animateGlow() {
+            // نحاكي نبض بسيط عن طريق تغيير خاصية الظل للـ canvas نفسه (drop-shadow)
+            // نستخدم CSS بدلاً من إعادة الرسم الثقيل للحفاظ على الأداء
+            const canvasEl = document.getElementById('heartCanvas');
+            if (glowIntensity <= 0.2) increasing = true;
+            if (glowIntensity >= 0.9) increasing = false;
+            glowIntensity += increasing ? 0.025 : -0.025;
+            const shadowSize = 6 + glowIntensity * 10;
+            const shadowOpacity = 0.4 + glowIntensity * 0.4;
+            canvasEl.style.filter = `drop-shadow(0 0 ${shadowSize}px rgba(255, 70, 110, ${shadowOpacity})) drop-shadow(0 0 ${shadowSize/2}px #ffb3c6)`;
+            requestAnimationFrame(animateGlow);
+        }
+        
+        // إعادة الرسم عند تغيير حجم الشاشة ليس ضروريًا لكن نحافظ على الجودة
+        window.addEventListener('resize', () => {
+            // لا حاجة لإعادة الرسم لأن canvas ثابت الأبعاد , فقط نتأكد من عدم تمدد غير مرغوب
+            if (canvas.width !== 400) {
+                canvas.width = 400;
+                canvas.height = 400;
+                ctx.setTransform(1, 0, 0, 1, 0, 0);
+                ctx.clearRect(0, 0, 400, 400);
+                ctx.translate(200, 200);
+                drawHeart(10.2, "#2c0a12");
+                drawHeart(9.8, "#7a1f2e");
+                drawHeart(9.2, "#e61a3a");
+                drawHeart(8.7, "#ff3366");
+                drawHeart(8, "#ff4d6d");
+                drawHeart(6.5, "#ff8aa8");
+                drawHeart(4.2, "#ffb3c6");
+                ctx.fillStyle = "#fff9fb";
+                ctx.beginPath();
+                ctx.arc(-22, -18, 3.2, 0, Math.PI*2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(24, -15, 4, 0, Math.PI*2);
+                ctx.fill();
+            }
+        });
+        
+        animateGlow();
+        
+        // إضافة تأثيرات جزيئات صغيرة متحركة داخل الحاوية لإضفاء رونق
+        const starsDiv = document.querySelector('.stars');
+        if (starsDiv) {
+            for (let i = 0; i < 70; i++) {
+                let star = document.createElement('div');
+                star.style.position = 'absolute';
+                star.style.width = Math.random() * 2.5 + 'px';
+                star.style.height = star.style.width;
+                star.style.backgroundColor = `rgba(255, 200, 210, ${Math.random() * 0.6 + 0.2})`;
+                star.style.borderRadius = '50%';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.filter = 'blur(0.6px)';
+                star.style.pointerEvents = 'none';
+                star.style.animation = `floatStar ${5 + Math.random() * 7}s infinite alternate ease-in-out`;
+                star.style.animationDelay = Math.random() * 5 + 's';
+                starsDiv.appendChild(star);
+            }
+        }
+        
+        // إضافة تعريف keyframes للنجوم العائمة
+        const styleSheet = document.createElement("style");
+        styleSheet.textContent = `
+            @keyframes floatStar {
+                0% { transform: translateY(0px) translateX(0px); opacity: 0.2; }
+                100% { transform: translateY(-20px) translateX(15px); opacity: 0.9; }
+            }
+            @keyframes gentlePulse {
+                0% { text-shadow: 0 0 0px #ff4d6d; }
+                100% { text-shadow: 0 0 8px #ff99bb; }
+            }
+            .love-message {
+                animation: gentlePulse 3s infinite alternate;
+            }
+        `;
+        document.head.appendChild(styleSheet);
+        
+        // إعادة تنسيق الهيدر لضمان الخطوط الجميلة
+        const msgDiv = document.querySelector('.message-content');
+        if (msgDiv) {
+            // جعل النص أكثر جاذبية بإضافة أيقونات يدوية (بدون تغيير المحتوى الأصلي)
+            // تم بالفعل تضمين فقرات منسقة، ونضمن أن كل سطر يظهر بشكل جيد
+        }
+        
+        // إضافة تأثير وميض ناعم للحروف
+        let heartEmojis = document.querySelectorAll('.heart-emoji');
+        setInterval(() => {
+            heartEmojis.forEach(em => {
+                em.style.transform = 'scale(1.1)';
+                setTimeout(() => { em.style.transform = 'scale(1)'; }, 300);
+            });
+        }, 1500);
+        
+        // تحسين لمسات المستخدمين على الجوال
+        let containerTouch = document.querySelector('.container');
+        if (containerTouch) {
+            containerTouch.addEventListener('touchstart', function(e) {
+                // فقط تأثير بسيط
+                this.style.transform = 'scale(0.99)';
+                setTimeout(() => { this.style.transform = ''; }, 150);
+            });
+        }
+        
+        // عرض رسالة ترحيبية خفيفة في الـ console (للفخر)
+        console.log("❤️ قلبك النابض بحبك - الصفحة مصممة بروح جميلة");
+    })();
+</script>
 </body>
 </html>
